@@ -9,9 +9,12 @@
 
 #include <stdio.h>
 
+//--MINE
 //added along with entry in lighting.sln properties>link>input:"legacy_stdio_definitions.lib;"
 //provides missing reference to __iob_func[] usage and so fixes old-toolset problem R.P.
 extern "C" { FILE __iob_func[3] = { stdin,stdout,*stderr }; }
+GLenum errorEnum;
+//--MINE
 
 // 3. Dodaj swoje imiê i nazwisko do belki tytu³owej
 // ...
@@ -129,7 +132,7 @@ void LoadAndCompileShader(char* fullFileName, GLuint shaderKind, GLuint* shaderN
 	if (success == 0)
 	{
 		glGetShaderInfoLog(*shaderNum, MAX_INFO_LOG_SIZE, NULL, infoLog);
-		FatalError((char*)GL_COMPILE_STATUS, infoLog, "");
+		FatalError("COMPILATION STATUS UNSUCCESSFUL", "", infoLog);
 	}
 }
 void PrepareShader(GLint shaderNum)
@@ -189,13 +192,13 @@ void PrepareShader(GLint shaderNum)
 	// ...
 	if (success == 0)
 	{
-		glGetShaderInfoLog(shaderNum, MAX_INFO_LOG_SIZE, NULL, infoLog);
-		FatalError((char*)GL_COMPILE_STATUS, infoLog, "");
-		// 20. Ustawienie w odpowiednim miejscu tablicy needsValidation[] 
-		// informacji o koniecznoœci walidacji programu cieniowania (GL_TRUE)
-		// ...
-		needsValidation[shaderNum] = GL_TRUE;
+		FatalError("SHADER LINKING", "Unable to link", "");
 	}
+
+	// 20. Ustawienie w odpowiednim miejscu tablicy needsValidation[] 
+	// informacji o koniecznoœci walidacji programu cieniowania (GL_TRUE)
+	// ...
+	needsValidation[shaderNum] = GL_TRUE;
 
 }
 // ------------------------------------------------------------------------
@@ -225,27 +228,27 @@ void DrawModels(void)
 	// drugim parametrem jest nazwa zmiennej Uniform "lightPos[0]"
 	// Wynik nale¿y podstawiæ do zmiennej uniformLoc
 	// ...
-
+	//uniformLoc = glGetUniformLocation(progObj[actualShader], "lightPos[0]");
 
 	// 30. Je¿eli zwrócony identyfikator jest ró¿ny od -1, ustawienie aktualnej pozycji œwiat³a 0 funkcj¹ glUniform3fv()
 	// Pierwszym parametrem jest identyfikator zmiennej, 
 	// drugim parametrem jest liczba argumentów (1)
 	// trzecim parametrem wektor wspó³rzêdnych oœwietlenia o (lightPos0Eye)
 	// ...
-
-
+	//if (uniformLoc != -1)
+		//glUniform3fv(uniformLoc, 1, lightPos0Eye);
 
 	// 37. Analogiczne ustawienie parametru dla œwiat³a nr 1
 	// ...
-
-
-
+	/*uniformLoc = glGetUniformLocation(actualShader, "lightPos[1]");
+	if (uniformLoc != -1)
+		glUniform3fv(uniformLoc, 1, lightPos1Eye);*/
 
 	// 37. Analogiczne ustawienie parametru dla œwiat³a nr 2
 	// ...
-
-
-
+	/*uniformLoc = glGetUniformLocation(actualShader, "lightPos[2]");
+	if (uniformLoc != -1)
+		glUniform3fv(uniformLoc, 1, lightPos2Eye);*/
 
 	// Narysowanie niebieskiej podstawy obiektów
 	glColor3f(0.0f, 0.0f, 0.90f);
@@ -317,22 +320,21 @@ void RenderScene(void)
 		// 21. Walidacja aktualnego (actualShader) programu cieniowania funkcj¹ glValidateProgram()
 		// Parametrem jest aktualny identyfikator obiektu programu cieniowania
 		// ...
-		glValidateProgram(actualShader);
+		glValidateProgram(progObj[actualShader]);
 
 		// 22. Sprawdzenie statusu walidacji funkcj¹ glGetProgramiv()
 		// Pierwszym parametrem jest identyfikator obiektu programu cieniowania, 
 		// drugim rodzaj sprawdzanego b³êdu (GL_VALIDATE_STATUS)
 		// trzecim adres zmiennej na zwracany kod b³êdu (success)
 		// ...
-		glGetProgramiv(actualShader, GL_VALIDATE_STATUS, &success);
+		glGetProgramiv(progObj[actualShader], GL_VALIDATE_STATUS, &success);
 
 		// 23. Informacja o ewentualnym b³êdzie w przypadku, gdy success == 0
 		// "SHADER VALIDATION", "Unable to validate"
 		// ...
 		if (success == 0)
 		{
-			glGetShaderInfoLog(actualShader, MAX_INFO_LOG_SIZE, NULL, infoLog);
-			FatalError((char*)GL_VALIDATE_STATUS, infoLog, "");
+			FatalError("SHADER VALIDATION", "Unable to validate", "");
 		}
 
 		// 24. Wyzerowanie informacji o potrzebie walidacji aktualnego programu cieniowania
@@ -341,8 +343,13 @@ void RenderScene(void)
 	}
 	// Narysowanie modeli 
 	DrawModels();
-	if (glGetError() != GL_NO_ERROR)
+	errorEnum = glGetError();
+	if (errorEnum != GL_NO_ERROR)
+	{ 
 		fprintf(stderr, "GL Error!\n");
+		if (errorEnum == GL_INVALID_VALUE) fprintf(stderr, "GL_INVALID_VALUE\n");
+		else if (errorEnum == GL_INVALID_VALUE) fprintf(stderr, "GL_INVALID_OPERATION\n");
+	}
 	// narysowanie sceny
 	glutSwapBuffers();
 }
@@ -379,7 +386,7 @@ void SetupRC()
 	// Parametrem jest identyfikator aktualnego programu cieniowania
 	// UWAGA! actualShader jest indeksem!!!!!
 	// ...
-	glUseProgram(actualShader);
+	glUseProgram(progObj[actualShader]);
 }
 char* SetTitle(void)
 {
@@ -398,7 +405,7 @@ void KeyPressFunc(unsigned char key, int x, int y)
 		// 27. Ustawienie nowego (actualShader) programu cieniowania funkcj¹ glUseProgram()
 		// Parametrem jest identyfikator aktualnego programu cieniowania
 		// ...
-		glUseProgram(actualShader);
+		glUseProgram(progObj[actualShader]);
 
 		break;
 	case 'x':
