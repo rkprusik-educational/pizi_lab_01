@@ -6,5 +6,5 @@ varying vec3 L[ 3 ]; // maksymalnie trzy intepolowane wektory œwiat³a
 
 void main( void )
 {
-   gl_FragColor = gl_Color; // skopiowanie g³ównego koloru (primary color)
+   gl_FragColor = gl_Color * 0.5; // skopiowanie g³ównego koloru (primary color)
 }
