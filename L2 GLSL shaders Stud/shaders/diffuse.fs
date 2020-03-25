@@ -11,7 +11,7 @@ void main( void )
    //Obliczenie wspó³czynnika jasnoœci (float intensity) jako maksimum (max()) z 0.0 oraz iloczynu
    //skalarnego (dot()) znormalizowanego (normalize()) wektora normalnej i znormalizowanego
    //wektora œwiat³a nr 0 (L[0]) intensity = max(0.0, N> (*) L>).
-   float intensity = max(0.0, normalize(dot(N, normalize(L[0]))));
+   float intensity = max(0.0, dot(normalize(N), normalize(L[0])));
 
    //Wyznaczenie koloru fragmentu (gl_FragColor) jako interpolowanego koloru z jednostki VS
    //(gl_Color).
