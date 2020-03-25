@@ -228,15 +228,15 @@ void DrawModels(void)
 	// drugim parametrem jest nazwa zmiennej Uniform "lightPos[0]"
 	// Wynik nale¿y podstawiæ do zmiennej uniformLoc
 	// ...
-	//uniformLoc = glGetUniformLocation(progObj[actualShader], "lightPos[0]");
+	uniformLoc = glGetUniformLocation(progObj[actualShader], "lightPos[0]");
 
 	// 30. Je¿eli zwrócony identyfikator jest ró¿ny od -1, ustawienie aktualnej pozycji œwiat³a 0 funkcj¹ glUniform3fv()
 	// Pierwszym parametrem jest identyfikator zmiennej, 
 	// drugim parametrem jest liczba argumentów (1)
 	// trzecim parametrem wektor wspó³rzêdnych oœwietlenia o (lightPos0Eye)
 	// ...
-	//if (uniformLoc != -1)
-		//glUniform3fv(uniformLoc, 1, lightPos0Eye);
+	if (uniformLoc != -1)
+		glUniform3fv(uniformLoc, 1, lightPos0Eye);
 
 	// 37. Analogiczne ustawienie parametru dla œwiat³a nr 1
 	// ...
