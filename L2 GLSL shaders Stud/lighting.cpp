@@ -240,15 +240,15 @@ void DrawModels(void)
 
 	// 37. Analogiczne ustawienie parametru dla œwiat³a nr 1
 	// ...
-	/*uniformLoc = glGetUniformLocation(actualShader, "lightPos[1]");
+	uniformLoc = glGetUniformLocation(progObj[actualShader], "lightPos[1]");
 	if (uniformLoc != -1)
-		glUniform3fv(uniformLoc, 1, lightPos1Eye);*/
+		glUniform3fv(uniformLoc, 1, lightPos1Eye);
 
 	// 37. Analogiczne ustawienie parametru dla œwiat³a nr 2
 	// ...
-	/*uniformLoc = glGetUniformLocation(actualShader, "lightPos[2]");
+	uniformLoc = glGetUniformLocation(progObj[actualShader], "lightPos[2]");
 	if (uniformLoc != -1)
-		glUniform3fv(uniformLoc, 1, lightPos2Eye);*/
+		glUniform3fv(uniformLoc, 1, lightPos2Eye);
 
 	// Narysowanie niebieskiej podstawy obiektów
 	glColor3f(0.0f, 0.0f, 0.90f);

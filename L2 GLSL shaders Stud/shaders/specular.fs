@@ -26,6 +26,7 @@ void main( void )
    //nowo intensywnoœæ, podobnie jak dla sk³adowej rozproszonej, jednak korzystaj¹c z wektora NH zamiast
    //NL, a nastêpnie wyliczana jest sk³adowa odbicia lustrzanego jako intensywnoœæ do potêgi (pow())
    //zdefiniowanego wczeœniej wyk³adnika specularExp, zrzutowana na wektor vec3.
+
    vec3 specular;
    if(intensity > 0.0)
    {
@@ -34,6 +35,7 @@ void main( void )
    }
    else
         specular = intensity;
+
    //g. Obliczenie koloru fragmentu (tylko pola .xyz) jako sumy sk³adowej œwiat³a rozproszonego (diffuse) i
    //odbicia lustrzanego (specular).
    gl_FragColor.xyz = diffuse + specular;
